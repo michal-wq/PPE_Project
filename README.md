@@ -10,3 +10,5 @@ Forschungsfragen:
 → Gibt es Genres, die durchweg höhere oder niedrigere Bewertungen erhalten?
 2. Wie beeinflusst das "Tag" die durchschnittliche Bewertung eines Films?
 → Gibt es Tags, die durchweg höhere oder niedrigere Bewertungen erhalten?
+3. Wie beeinflusst das Erscheinungsjahr die durchschnittliche Bewertung eines Films?
+→ Gibt es Erscheinungsjahre, die durchweg höhere oder niedrigere Bewertungen erhalten?
