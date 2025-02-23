@@ -1,0 +1,9 @@
+numpy
+pandas
+sckit-learn
+matplotlib
+seaborn
+dash
+dash-bootstrap-components
+plotly
+joblib
