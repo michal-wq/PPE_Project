@@ -12,3 +12,8 @@ Forschungsfragen:
 → Gibt es Tags, die durchweg höhere oder niedrigere Bewertungen erhalten?
 3. Wie beeinflusst das Erscheinungsjahr die durchschnittliche Bewertung eines Films?
 → Gibt es Erscheinungsjahre, die durchweg höhere oder niedrigere Bewertungen erhalten?
+
+Ähnlichkeit wird bestimmt durch:
+- Übereinstimmende Tags
+- Übereinstimmende Genres
+- Ein Erscheinungsjahr, das möglichst nah am vorgegebenen Jahr liegt
