@@ -4,6 +4,7 @@ Programmierung und Prompt Engineering project
 
 Checkliste:
 https://1drv.ms/w/c/170031cd946a17ea/EQpencEQR05Pk9gZyRrXMkoBrk26hUwRBqb4HTJ6gurjkg
+Daten: https://drive.google.com/drive/folders/1x6z0GHcgoM4B0zkI7y2kCB2nHSZKDkb0?usp=sharing
 
 Forschungsfragen:
 1. Wie beeinflusst das Genre die durchschnittliche Bewertung eines Films?
