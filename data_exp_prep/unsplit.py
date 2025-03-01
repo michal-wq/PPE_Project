@@ -13,3 +13,11 @@ def unsplit(pfad):
 
     ret_df = pd.concat(df_liste, ignore_index=True)
     return ret_df
+
+def get_genre(x):
+    return x.split(sep = '|')
+
+
+
+
+
