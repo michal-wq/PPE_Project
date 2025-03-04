@@ -15,6 +15,7 @@ import glob
 from data_exp_prep.unsplit import unsplit, get_genre # selbstgeschreibene funktion aus /data_exp_prep/unsplit.py
 from sklearn.preprocessing import LabelEncoder
 import random as rd
+import dask.dataframe as dd
 n = 100
 
 # Read data
@@ -99,7 +100,39 @@ tags = tags_copy
 
 print(tags.head(5))
 print('-'*n)
+"""
+Optimierung von Datentypen
+"""
+print('Optimierung von Datentypen')
+tags['movieId'].astype('uint32')
+tags['userId'].astype('uint32')
 
+ratings['movieId'].astype('uint32')
+ratings['userId'].astype('uint32')
+ratings['rating'].astype('float16')
+
+movies['year'].astype('uint16')
+print('-'*n)
+
+
+"""
+Merge all Dataframes into one df
+"""
+print('Merging all data')
+
+# Merge step by step
+movies_ddf1 = dd.from_pandas(movies, npartitions=10)
+links_ddf2 = dd.from_pandas(links, npartitions=10)
+ratings_ddf3 = dd.from_pandas(ratings, npartitions=10)
+tags_ddf4 = dd.from_pandas(tags, npartitions=10)
+
+df = movies_ddf1.merge(links_ddf2, on='movieId', how='outer') \
+               .merge(ratings_ddf3, on='movieId', how='outer') \
+               .merge(tags_ddf4, on='movieId', how='outer') \
+               .compute()  # Compute when ready
+
+
+print('-'*n)
 """
 Here comes the learing of the machine tbd
 """
