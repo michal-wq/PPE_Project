@@ -103,6 +103,14 @@ print('-'*n)
 """
 Optimierung von Datentypen
 """
+print(tags.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+print(ratings.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+print(movies.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+print(links.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+print('-'*n)
+
+
+
 print('Optimierung von Datentypen')
 tags['movieId'].astype('uint32')
 tags['userId'].astype('uint32')
@@ -115,23 +123,27 @@ movies['year'].astype('uint16')
 print('-'*n)
 
 
+print(tags.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+print(ratings.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+print(movies.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+print(links.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+print('-'*n)
+
 """
 Merge all Dataframes into one df
 """
 print('Merging all data')
 
 # Merge step by step
-movies_ddf1 = dd.from_pandas(movies, npartitions=10)
-links_ddf2 = dd.from_pandas(links, npartitions=10)
-ratings_ddf3 = dd.from_pandas(ratings, npartitions=10)
-tags_ddf4 = dd.from_pandas(tags, npartitions=10)
+df_merged_1 = movies.merge(ratings, on='movieId', how='outer')
+del movies, ratings  # Free memory
 
-df = movies_ddf1.merge(links_ddf2, on='movieId', how='outer') \
-               .merge(ratings_ddf3, on='movieId', how='outer') \
-               .merge(tags_ddf4, on='movieId', how='outer') \
-               .compute()  # Compute when ready
+df_merged_2 = links.merge(tags, on='movieId', how='outer')
+del links, tags  # Free memory
 
-
+df = df_merged_1.merge(df_merged_2, on='movieId', how='outer')
+del df_merged_1, df_merged_2  # Free memory
+print(df.head(3))
 print('-'*n)
 """
 Here comes the learing of the machine tbd
