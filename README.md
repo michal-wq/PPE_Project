@@ -18,3 +18,6 @@ Similarity is determined by:
 - Matching tags
 - Matching genres
 - A release year that is as close as possible to the given year
+
+To-Do-List:
+- Feature erstellen, das die userIDs aller Rater für die jeweiligen Movies verknüpft.
