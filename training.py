@@ -29,7 +29,7 @@ tags = pd.read_csv('Data/tags.csv')
 #dictonary in which the keys are the dfs, and the values are the columns that are going to be dropped at the end of data prep
 cols_to_drop = {
     'movies': ['genres', 'genres_list', 'genres_str', 'title'],
-    'ratings': ['timestamp', 'Unnamed: 0'],
+    'ratings': ['timestamp', 'Unnamed: 0', 'userId'],
     'tags': ['tag', 'timestamp']
 }
 
@@ -103,26 +103,26 @@ print('-'*n)
 """
 Optimierung von Datentypen
 """
+# Wie viel Speicher brauchen die einzelnen Dataframes
 print(tags.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
 print(ratings.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
 print(movies.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
 print(links.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
 print('-'*n)
 
-
-
+# Datentyp optimierung
 print('Optimierung von Datentypen')
-tags['movieId'].astype('uint32')
-tags['userId'].astype('uint32')
+tags['movieId'] = tags['movieId'].astype('uint32')
+tags['userId'] = tags['userId'].astype('uint32')
 
-ratings['movieId'].astype('uint32')
-ratings['userId'].astype('uint32')
-ratings['rating'].astype('float16')
+ratings['movieId'] = ratings['movieId'].astype('uint32')
+#ratings['userId'] = ratings['userId'].astype('uint32')
+ratings['rating'] = ratings['rating'].astype('float16')
 
-movies['year'].astype('uint16')
+movies['year'] = movies['year'].astype('uint16')
 print('-'*n)
 
-
+# Wie viel Speicher brauchen die einzelnen Dataframes
 print(tags.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
 print(ratings.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
 print(movies.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
@@ -136,15 +136,16 @@ print('Merging all data')
 
 # Merge step by step
 df_merged_1 = movies.merge(ratings, on='movieId', how='outer')
-del movies, ratings  # Free memory
+del movies, ratings
 
 df_merged_2 = links.merge(tags, on='movieId', how='outer')
-del links, tags  # Free memory
+del links, tags
 
 df = df_merged_1.merge(df_merged_2, on='movieId', how='outer')
-del df_merged_1, df_merged_2  # Free memory
+del df_merged_1, df_merged_2
 print(df.head(3))
 print('-'*n)
+
 """
 Here comes the learing of the machine tbd
 """
