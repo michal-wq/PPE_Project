@@ -21,3 +21,4 @@ Similarity is determined by:
 
 To-Do-List:
 - Feature erstellen, das die userIDs aller Rater für die jeweiligen Movies verknüpft.
+

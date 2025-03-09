@@ -10,3 +10,4 @@ joblib
 zipfile
 glob
 dask
+torch
