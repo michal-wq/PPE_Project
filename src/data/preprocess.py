@@ -2,8 +2,6 @@
 Hier wird:
 - feautre engineering automatisch durchgeführt, die Dateien werden nicht gespeichert sondern nur als Dataframe instanziert
 und fürs Training von ML Modellen verwendet
-- ML Modell wird dann gespeichert
-- Es wird (wahrscheinlich) nicht in dieser Datei getestet.
 """
 # alle imports
 import pandas as pd
@@ -35,9 +33,9 @@ def run_preprocessing():
 
     #dictonary in which the keys are the dfs, and the values are the columns that are going to be dropped at the end of data prep
     cols_to_drop = {
-        'movies': ['genres', 'genres_list', 'genres_str', 'title'],
+        'movies': ['genres', 'genres_list', 'genres_str', 'title', 'title_only'],
         'ratings': ['timestamp', 'Unnamed: 0', 'userId'],
-        'tags': ['tag', 'timestamp']
+        'tags': ['tag', 'timestamp', 'userId']
     }
 
 
@@ -58,6 +56,7 @@ def run_preprocessing():
 
     # join the genres to the data frame
     movies_copy = movies_copy.join(genre_dummies)
+    del genre_dummies
 
     # seperate the year from the title
     movies_copy[['title_only','year']] = movies_copy['title'].str.extract(r'^(.*)\s\((\d{4})\)$')
@@ -67,12 +66,13 @@ def run_preprocessing():
 
     # fill the null values with a random year between 1950 and 2025
     movies_copy.loc[mask, 'year'] = np.random.randint(1950, 2026, size=mask.sum())
-
+    movies_copy['year'] = movies_copy['year'].astype(np.uint16)
+    movies_copy['year'] = movies_copy['year'] / movies_copy['year'].max()
     # drop the columns
     movies_copy.drop(columns = cols_to_drop['movies'], inplace = True, axis = 1)
 
     movies = movies_copy
-
+    del movies_copy
     print(movies.head(5))
 
     print('-'*n)
@@ -81,7 +81,10 @@ def run_preprocessing():
     print('Preparing the Ratings')
 
     ratings.drop(cols_to_drop['ratings'], inplace = True, axis = 1)
-
+    ratings = ratings.groupby(['movieId']).mean()
+    ratings['rating'].fillna(ratings['rating'].median(), inplace=True)
+    print(ratings.isna().sum())
+    ratings['rating'] = ratings['rating'] / ratings['rating'].max()
     print(ratings.head(5))
     print('-'*n)
 
@@ -99,12 +102,15 @@ def run_preprocessing():
 
     # encode the string values of tags into numerical data using label encoder
     tags_copy['tag_encoded'] = le.fit_transform(tags_copy['tag'])
+    tag_min = tags_copy['tag_encoded'].min()
+    tag_max = tags_copy['tag_encoded'].max()
+    tags_copy['tag_encoded'] = tags_copy['tag_encoded'].apply(lambda x: np.random.randint(tag_min, tag_max) if pd.isnull(x) else x)
 
     # drop the cols
     tags_copy.drop(cols_to_drop['tags'], inplace = True, axis = 1)
 
     tags = tags_copy
-
+    del tags_copy
     print(tags.head(5))
     print('-'*n)
     """
@@ -119,14 +125,14 @@ def run_preprocessing():
 
     # Datentyp optimierung
     print('Optimierung von Datentypen')
-    tags['movieId'] = tags['movieId'].astype('uint32')
-    tags['userId'] = tags['userId'].astype('uint32')
+    tags['movieId'] = tags['movieId'].astype(np.uint32)
+    #tags['userId'] = tags['userId'].astype(np.uint32)
 
-    ratings['movieId'] = ratings['movieId'].astype('uint32')
+    #ratings['movieId'] = ratings['movieId'].astype(np.uint32)
     #ratings['userId'] = ratings['userId'].astype('uint32')
-    ratings['rating'] = ratings['rating'].astype('float16')
+    ratings['rating'] = ratings['rating'].astype(np.float16)
 
-    movies['year'] = movies['year'].astype('uint16')
+    movies['year'] = movies['year'].astype(np.float16)
     print('-'*n)
 
     # Wie viel Speicher brauchen die einzelnen Dataframes
@@ -139,19 +145,21 @@ def run_preprocessing():
     """
     Merge all Dataframes into one df
     """
-    print('Merging all data')
+    print('Merging movies and ratings')
 
     # Merge step by step
     df_merged_1 = movies.merge(ratings, on='movieId', how='outer')
     del movies, ratings
-
-    df_merged_2 = links.merge(tags, on='movieId', how='outer')
-    del links, tags
-
-    df = df_merged_1.merge(df_merged_2, on='movieId', how='outer')
-    del df_merged_1, df_merged_2
+    print('-' * n)
+    print('Merging links and tags')
+    df = df_merged_1.merge(tags, on='movieId', how='outer')
+    del df_merged_1, tags
     print(df.head(3))
     print('-'*n)
 
+    df['rating'].fillna(df['rating'].median(), inplace=True)
+    df['tag_encoded'] = df['tag_encoded'].apply(lambda x: np.random.randint(tag_min, tag_max) if pd.isnull(x) else x)
+    print(df.isna().sum())
+    print('Process Finished')
 
 
