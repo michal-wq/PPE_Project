@@ -7,7 +7,7 @@ und fürs Training von ML Modellen verwendet
 import pandas as pd
 import numpy as np
 from Notebooks.data_exp_prep.unsplit import unsplit  # selbstgeschreibene funktion aus /data_exp_prep/unsplit.py
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 import os
 
 def run_preprocessing():
@@ -66,8 +66,16 @@ def run_preprocessing():
 
     # fill the null values with a random year between 1950 and 2025
     movies_copy.loc[mask, 'year'] = np.random.randint(1950, 2026, size=mask.sum())
+
+    # normierung
+
+
     movies_copy['year'] = movies_copy['year'].astype(np.uint16)
-    movies_copy['year'] = movies_copy['year'] / movies_copy['year'].max()
+    X = movies_copy['year'].values.reshape(-1, 1)
+    norm = StandardScaler().fit(X)
+    X_normalized = norm.transform(X)
+    movies_copy['year'] = X_normalized
+
     # drop the columns
     movies_copy.drop(columns = cols_to_drop['movies'], inplace = True, axis = 1)
 
@@ -125,7 +133,7 @@ def run_preprocessing():
 
     # Datentyp optimierung
     print('Optimierung von Datentypen')
-    tags['movieId'] = tags['movieId'].astype(np.uint32)
+    #tags['movieId'] = tags['movieId'].astype(np.uint32)
     #tags['userId'] = tags['userId'].astype(np.uint32)
 
     #ratings['movieId'] = ratings['movieId'].astype(np.uint32)
@@ -155,11 +163,43 @@ def run_preprocessing():
     df = df_merged_1.merge(tags, on='movieId', how='outer')
     del df_merged_1, tags
     print(df.head(3))
-    print('-'*n)
+    print('='*n)
 
     df['rating'].fillna(df['rating'].median(), inplace=True)
     df['tag_encoded'] = df['tag_encoded'].apply(lambda x: np.random.randint(tag_min, tag_max) if pd.isnull(x) else x)
     print(df.isna().sum())
-    print('Process Finished')
+    print(len(df))
+    print('='*n)
+
+    label = df['rating']
+    features = df.drop('rating', axis=1)
+    del df
+
+    print(f'Speicherverbrauch von labels: {label.memory_usage() / 1_000_000} MB')
+    print(f'Speicherverbrauch von features: {features.memory_usage().sum() / 1_000_000} MB')
+    print(len(features['movieId'].unique()))
+    print(len(label))
+    print('=' * n)
+
+    # Build the file path for the label CSV
+    label_path = os.path.join(data_dir, 'preprocessed', 'label', 'label.csv')
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(label_path), exist_ok = True)
+
+    # Save label to CSV
+    label.to_csv(label_path, index=False)
+    del label
+
+    # 10 dfs
+    split_features = np.array_split(features, 10)
+    
+    # separate CSV file
+    for i, part_df in enumerate(split_features):
+        filename = f"features_part_{i + 1}.csv"  # File names: features_part_1.csv, features_part_2.csv, etc.
+        file_path = os.path.join(data_dir, 'preprocessed', 'features', filename)
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_path), exist_ok = True)
+        part_df.to_csv(file_path, index=False)
+        print(f"Saved {filename}")
 
 
