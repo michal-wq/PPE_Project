@@ -63,8 +63,8 @@ if __name__ == '__main__':
         train_dataloader=train_dataloader,
         criterion=criterion,
         optimizer=optimizer,
-        epochs=10,          # total epochs we plan to run
-        warmup_batches=1    # number of batches to time
+        epochs=10,          # total epochs
+        warmup_batches=20    # number of batches to time
     )
     print(f'Estimated training time for 10 epochs: {estimated_time_seconds:.2f} seconds')
 
@@ -89,7 +89,7 @@ if __name__ == '__main__':
             # Forward
             prediction = Model(inputs)
 
-            # Compute loss
+            # loss berechnen
             batch_loss = criterion(prediction, labels)
 
             # Backprop
@@ -97,18 +97,18 @@ if __name__ == '__main__':
             optimizer.step()
             optimizer.zero_grad()
 
-            # Accumulate total loss (MSE) and sum of squared errors for RMSE
+            # summe von total loss
             bs = inputs.size(0)  # batch size
             total_loss_train += batch_loss.item() * bs
             total_se_train += (prediction - labels).pow(2).sum().item()
             total_samples_train += bs
 
-        # Average MSE across the entire training set
+        # MSE
         epoch_mse = total_loss_train / total_samples_train
-        # RMSE is sqrt of average MSE
+        # RMSE
         epoch_rmse = (total_se_train / total_samples_train) ** 0.5
 
-        # Validation loop (similar approach)
+        # Validierung
         Model.eval()
         val_loss = 0.0
         val_se = 0.0
@@ -133,13 +133,13 @@ if __name__ == '__main__':
     '''
     Save the trained model
     '''
-    # Create a directory for saving the model (if it doesn't exist)
+    # Ordner
     save_dir = '../trained_models'
     os.makedirs(save_dir, exist_ok=True)
 
-    # Define a path for the model
+    # Speicherort
     model_save_path = os.path.join(save_dir, 'movie_recommender.pth')
 
-    # Save only the model's state_dict
+    # speichern
     torch.save(Model.state_dict(), model_save_path)
     print(f'Model has been saved to {model_save_path}')
