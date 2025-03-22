@@ -1,6 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.utils.data import Dataset, DataLoader
+from torchsummary import summary
+
 
 class MovieRecommender(nn.Module):
     def __init__(self, input_dim, hidden_dim=64):
@@ -28,4 +31,18 @@ class MovieRecommender(nn.Module):
         x = F.relu(self.fc2(x))
         # Output layer
         rating = self.fc3(x)
+
         return rating
+
+
+class Dset(Dataset):
+    def __init__(self, X, y):
+        self.X = torch.tensor(X, dtype=torch.float32)
+        self.Y = torch.tensor(y, dtype=torch.float32)
+
+    def __len__(self):
+        return len(self.X)
+
+    def __getitem__(self, index):
+        return self.X[index], self.Y[index]
+
