@@ -4,7 +4,12 @@ Programmierung und Prompt Engineering project
 
 Checkliste:
 https://1drv.ms/w/c/170031cd946a17ea/EQpencEQR05Pk9gZyRrXMkoBrk26hUwRBqb4HTJ6gurjkg
-Data: https://drive.google.com/drive/folders/1x6z0GHcgoM4B0zkI7y2kCB2nHSZKDkb0?usp=sharing
+
+Data: 
+https://drive.google.com/drive/folders/1x6z0GHcgoM4B0zkI7y2kCB2nHSZKDkb0?usp=sharing
+
+Design:
+https://www.figma.com/design/k7q43prRWa6AKVQKF3jtyf/Movdex?node-id=0-1&p=f&t=DPt9W2WLAeTpVw34-0
 
 Research questions:
 1. how does genre influence the average rating of a film?
