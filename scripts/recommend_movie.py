@@ -6,7 +6,7 @@ from src.models.functions import load_features
 
 if __name__ == '__main__':
     # --- 0) IDs der 3 Filme, die Du schon gesehen hast ---
-    watched_movie_ids = [1, 208947, 24]
+    watched_movie_ids = [3, 54745, 77]
 
     # --- 1) Alle Feature‑CSVs laden und Duplikate nach movieId entfernen ---
     df = load_features('../Data/preprocessed/features')
