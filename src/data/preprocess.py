@@ -24,20 +24,19 @@ def run_preprocessing():
     links_path = os.path.join(data_dir, 'raw', 'links.csv')
     movies_path = os.path.join(data_dir, 'raw', 'movies.csv')
     ratings_path = os.path.join(data_dir, 'raw','ratings')  # for your unsplit function
-    tags_path = os.path.join(data_dir, 'raw', 'tags.csv')
+    #tags_path = os.path.join(data_dir, 'raw', 'tags.csv')
 
     links = pd.read_csv(links_path)
     movies = pd.read_csv(movies_path)
-    tags = pd.read_csv(tags_path)
+    #tags = pd.read_csv(tags_path)
     ratings = unsplit(ratings_path)
 
     #dictonary in which the keys are the dfs, and the values are the columns that are going to be dropped at the end of data prep
     cols_to_drop = {
         'movies': ['genres', 'genres_list', 'genres_str', 'title', 'title_only'],
         'ratings': ['timestamp', 'Unnamed: 0', 'userId'],
-        'tags': ['tag', 'timestamp', 'userId']
     }
-
+    #'tags': ['tag', 'timestamp', 'userId']
 
     print('-'*n)
     # Movies prep
@@ -102,30 +101,30 @@ def run_preprocessing():
     # https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html
     le = LabelEncoder()
 
-    tags_copy = tags.copy()
+    #tags_copy = tags.copy()
 
     # Cast a pandas object to a string or whatever but in this case string
     # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.astype.html
-    tags_copy['tag'] = tags_copy['tag'].astype(str)
+    #tags_copy['tag'] = tags_copy['tag'].astype(str)
 
     # encode the string values of tags into numerical data using label encoder
-    tags_copy['tag_encoded'] = le.fit_transform(tags_copy['tag'])
-    tag_min = tags_copy['tag_encoded'].min()
-    tag_max = tags_copy['tag_encoded'].max()
-    tags_copy['tag_encoded'] = tags_copy['tag_encoded'].apply(lambda x: np.random.randint(tag_min, tag_max) if pd.isnull(x) else x)
+    #tags_copy['tag_encoded'] = le.fit_transform(tags_copy['tag'])
+    #tag_min = tags_copy['tag_encoded'].min()
+    #tag_max = tags_copy['tag_encoded'].max()
+    #tags_copy['tag_encoded'] = tags_copy['tag_encoded'].apply(lambda x: np.random.randint(tag_min, tag_max) if pd.isnull(x) else x)
 
     # drop the cols
-    tags_copy.drop(cols_to_drop['tags'], inplace = True, axis = 1)
+    #tags_copy.drop(cols_to_drop['tags'], inplace = True, axis = 1)
 
-    tags = tags_copy
-    del tags_copy
-    print(tags.head(5))
-    print('-'*n)
+    #tags = tags_copy
+    #del tags_copy
+    #print(tags.head(5))
+    #print('-'*n)
     """
     Optimierung von Datentypen
     """
     # Wie viel Speicher brauchen die einzelnen Dataframes
-    print(tags.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+    #print(tags.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
     print(ratings.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
     print(movies.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
     print(links.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
@@ -144,7 +143,7 @@ def run_preprocessing():
     print('-'*n)
 
     # Wie viel Speicher brauchen die einzelnen Dataframes
-    print(tags.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
+    #print(tags.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
     print(ratings.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
     print(movies.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
     print(links.memory_usage(deep=True).sum() / (1024 * 1024), "MB")
@@ -160,13 +159,13 @@ def run_preprocessing():
     del movies, ratings
     print('-' * n)
     print('Merging links and tags')
-    df = df_merged_1.merge(tags, on='movieId', how='outer')
-    del df_merged_1, tags
-    print(df.head(3))
+    df = df_merged_1        #.merge(tags, on='movieId', how='outer')
+    #del df_merged_1, tags
+    #print(df.head(3))
     print('='*n)
 
     df['rating'].fillna(df['rating'].median(), inplace=True)
-    df['tag_encoded'] = df['tag_encoded'].apply(lambda x: np.random.randint(tag_min, tag_max) if pd.isnull(x) else x)
+    #df['tag_encoded'] = df['tag_encoded'].apply(lambda x: np.random.randint(tag_min, tag_max) if pd.isnull(x) else x)
     print(df.isna().sum())
     print(len(df))
     print('='*n)
@@ -196,7 +195,7 @@ def run_preprocessing():
     # separate CSV file
     for i, part_df in enumerate(split_features):
         filename = f"features_part_{i + 1}.csv"  # File names: features_part_1.csv, features_part_2.csv, etc.
-        file_path = os.path.join(data_dir, 'preprocessed', 'features', filename)
+        file_path = os.path.join(data_dir, 'preprocessed_cluster', 'features', filename)
         # Ensure the directory exists
         os.makedirs(os.path.dirname(file_path), exist_ok = True)
         part_df.to_csv(file_path, index=False)
