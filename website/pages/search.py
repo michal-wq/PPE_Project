@@ -27,10 +27,12 @@ big_list_item = html.Div(
     className="big-list-item",
 )
 
+big_list = html.Div([big_list_item for i in range(1, 10)], className="big-list")
+
 small_list_item = html.Div("dobar dan")
 
 
-layout = html.Div([big_list_item])
+layout = html.Div(big_list)
 
 
 def get_layout():
