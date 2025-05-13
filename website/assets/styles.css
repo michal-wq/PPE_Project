@@ -1,3 +1,38 @@
+/* Variables */
+:root {
+    /* colors */
+    /* background gradient colors */
+    --color-background-gradient-1: rgba(20, 39, 38, 1);
+    --color-background-gradient-2: rgba(33, 27, 23, 1);
+    --color-background-gradient-3: rgba(23, 10, 8, 1);
+
+
+    --color-primary: #ce7979;
+    --color-secondary: rgba (0, 0, 0, 1);
+    --color-transparent: rgba (0, 0, 0, 0);
+
+    --color-white-100: rgba(255, 255, 255, 1);
+    --color-white-75: rgba(255, 255, 255, 0.75);
+    --color-white-5: rgba(255, 255, 255, 0.5);
+    --color-white-25: rgba(255, 255, 255, 0.25);
+
+    /* standard margins, paddings, other numeric values */
+    --standard-margin: 5px;
+    --standard-padding: 10px;
+    --standard-border-radius: 5px;
+
+    /* chip margins, paddings, other numeric values */
+    --chip-border-radius: 25px;
+
+    /* desktop specific numeric values */
+    --flex-gap: 0.5rem;
+
+    /* tablet specific numeric values */
+
+    /* mobile specific numeric values */
+
+}
+
 /* 1. Use a more-intuitive box-sizing model */
 *,
 *::before,
@@ -7,10 +42,11 @@
 
 /* 2. Remove default margin */
 * {
-    color: white;
+    color: var(--color-white-100);
     font-family: Helvetica, sans-serif;
     font-weight: 750;
     margin: 0;
+    padding: 0;
 }
 
 /* 3. Enable keyword animations */
@@ -45,12 +81,12 @@ select {
     all: unset;
     box-shadow: none;
     font: inherit;
-    padding: 10px;
-    border-radius: 7.5px;
-    cursor: pointer;
+    padding: var(--standard-padding);
+    border-radius: var(--standard-border-radius);
 }
 
 button {
+    cursor: pointer;
     text-align: center;
 }
 
@@ -90,8 +126,8 @@ h6 {
 body {
     width: 100vw;
     height: 100vh;
-    background: #142726;
-    background: linear-gradient(90deg, rgba(20, 39, 38, 1) 0%, rgba(33, 27, 23, 1) 50%, rgba(23, 10, 8, 1) 100%);
+    background: var(--color-background-gradient-1);
+    background: linear-gradient(90deg, var(--color-background-gradient-1) 0%, var(--color-background-gradient-2) 50%, var(--color-background-gradient-3) 100%);
 }
 
 #_dash-app-content,
@@ -107,25 +143,25 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: var(--flex-gap);
 }
 
 .homepage-button-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--flex-gap);
 }
 
 .button-primary {
     width: 100%;
-    background-color: #CE7979;
+    background-color: var(--color-primary);
 }
 
 .button-secondary {
     width: 100%;
     background-color: rgba(0, 0, 0, 0);
-    border-color: #CE7979;
+    border-color: var(--color-primary);
     border-width: 2.5px;
     border-style: solid;
 }
@@ -142,7 +178,7 @@ body {
 
 .search-bar-container #search-bar-input {
     border-width: 2.5px;
-    border-color: white;
+    border-color: var(--color-white-75);
     border-style: solid;
 }
 
@@ -154,12 +190,11 @@ body {
 }
 
 .big-list-item {
-    width: 25rem;
-    margin: 10px;
-    padding: 5px;
+    margin: var(--standard-margin);
+    padding: var(--standard-padding);
     border-color: rgb(255, 255, 255, 0.25);
     border-width: 2.5px;
-    border-radius: 7.5px;
+    border-radius: var(--standard-border-radius);
     border-style: solid;
 
     display: flex;
@@ -172,7 +207,7 @@ body {
     width: 100%;
     border-color: rgb(255, 255, 255, 0.5);
     border-width: 2.5px;
-    border-radius: 7.5px;
+    border-radius: var(--standard-border-radius);
     background-color: #a23f3f;
 }
 
@@ -201,11 +236,11 @@ body {
 
 .big-list-item .big-list-item-add-to-liked-films-button {
     background-color: rgb(255, 255, 255, 0);
-    border-color: white;
+    border-color: var(--color-white-75);
     border-width: 2.5px;
     border-style: solid;
     font-size: medium;
-    padding: 5px;
+    padding: var(--standard-padding);
 
     display: flex;
     flex-direction: row;

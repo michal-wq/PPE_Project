@@ -1,9 +1,9 @@
-from dash import Dash, html, dcc
+from dash import html, dcc
 
 search_bar = html.Div(
     [
         html.Img(src="./assets/img/Logo.svg", className="search-bar-logo"),
-        dcc.Input(placeholder="Search...", id="search-bar-input"),
+        dcc.Input("", placeholder="Search...", id="search-bar-input"),
     ],
     className="search-bar-container",
 )
