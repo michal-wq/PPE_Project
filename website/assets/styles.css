@@ -45,7 +45,6 @@ select {
     all: unset;
     box-shadow: none;
     font: inherit;
-    background-color: #CE7979;
     padding: 10px;
     border-radius: 7.5px;
     cursor: pointer;
@@ -120,6 +119,7 @@ body {
 
 .button-primary {
     width: 100%;
+    background-color: #CE7979;
 }
 
 .button-secondary {
@@ -127,6 +127,22 @@ body {
     background-color: rgba(0, 0, 0, 0);
     border-color: #CE7979;
     border-width: 2.5px;
+    border-style: solid;
+}
+
+.search-bar-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.search-bar-container .search-bar-logo {
+    height: 100px;
+}
+
+.search-bar-container #search-bar-input {
+    border-width: 2.5px;
+    border-color: white;
     border-style: solid;
 }
 
@@ -140,9 +156,11 @@ body {
 .big-list-item {
     width: 25rem;
     margin: 10px;
-    border-color: rgb(255, 255, 255, 0.5);
+    padding: 5px;
+    border-color: rgb(255, 255, 255, 0.25);
     border-width: 2.5px;
     border-radius: 7.5px;
+    border-style: solid;
 
     display: flex;
     flex-direction: column;

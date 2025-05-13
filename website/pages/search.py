@@ -1,9 +1,16 @@
 from dash import Dash, html, dcc
 
+search_bar = html.Div(
+    [
+        html.Img(src="./assets/img/Logo.svg", className="search-bar-logo"),
+        dcc.Input(placeholder="Search...", id="search-bar-input"),
+    ],
+    className="search-bar-container",
+)
 
 big_list_item = html.Div(
     [
-        html.Div(None, className="big-list-item-preview-pic"),
+        # html.Div(None, className="big-list-item-preview-pic"),
         html.Div(
             [
                 html.Div("Action", className="big-list-item-genre-chip"),
@@ -31,8 +38,7 @@ big_list = html.Div([big_list_item for i in range(1, 10)], className="big-list")
 
 small_list_item = html.Div("dobar dan")
 
-
-layout = html.Div(big_list)
+layout = html.Div([search_bar, big_list])
 
 
 def get_layout():
