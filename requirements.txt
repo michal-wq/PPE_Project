@@ -1,13 +1,11 @@
 numpy
 pandas
-sckit-learn
+scikit-learn
 matplotlib
 seaborn
 dash
 dash-bootstrap-components
 plotly
 joblib
-zipfile
-glob
 dask
 torch
