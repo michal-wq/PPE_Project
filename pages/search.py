@@ -70,7 +70,7 @@ def get_film_as_html(film_list):
             ],
             className="big-list-item",
         )
-        for film in film_list  # <-- Use the parameter name, not the variable that doesn't exist yet
+        for film in film_list
     ]
     return html_list
 
@@ -90,12 +90,7 @@ search_bar = html.Div(
 )
 
 
-big_list = html.Div(get_film_as_html(get_random_films(15)), className="big-list")
-
-small_list_item = html.Div("dobar dan")
-
-layout = html.Div([search_bar, big_list])
-
-
 def get_layout():
+    big_list = html.Div(get_film_as_html(get_random_films(15)), className="big-list")
+    layout = html.Div([search_bar, big_list])
     return layout
