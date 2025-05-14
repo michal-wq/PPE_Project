@@ -1,16 +1,23 @@
 from dash import html, dcc
+import pandas as pd
 
 search_bar = html.Div(
     [
         html.Img(src="./assets/img/Logo.svg", className="search-bar-logo"),
-        dcc.Input("", placeholder="Search...", id="search-bar-input"),
+        html.Div(
+            [
+                dcc.Input("", placeholder="Search...", id="search-bar-input"),
+                html.Button(html.Img(src="./assets/icons/search.svg")),
+            ],
+            className="search-bar-field",
+        ),
     ],
     className="search-bar-container",
 )
 
 big_list_item = html.Div(
     [
-        # html.Div(None, className="big-list-item-preview-pic"),
+        html.Div(None, className="big-list-item-preview-pic"),
         html.Div(
             [
                 html.Div("Action", className="big-list-item-genre-chip"),
@@ -43,3 +50,10 @@ layout = html.Div([search_bar, big_list])
 
 def get_layout():
     return layout
+
+
+def get_random_movies(number):
+    df_movies = pd.read_csv("../../Data/raw/movies.csv")
+    df_links = pd.read_csv("../../Data/raw/links.csv")
+    merged_df = pd.merge(df_movies, df_links, on="movieId")
+    pass
