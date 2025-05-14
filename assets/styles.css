@@ -209,6 +209,8 @@ body {
     padding: calc(2 * var(--standard-padding));
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 .big-list-item {
