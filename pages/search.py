@@ -1,5 +1,5 @@
-from dash import html, dcc
-from dash.dependencies import Output, Input
+from dash import dash, html, dcc
+from dash.dependencies import Output, Input, State, ALL
 import pandas as pd
 
 
@@ -13,6 +13,7 @@ class Film:
 
 
 film_cache = []
+liked_films_cache = []
 
 
 def get_random_films(number):
@@ -113,6 +114,8 @@ def get_film_as_html(film_list):
                         "Add to liked films",
                     ],
                     className="big-list-item-add-to-liked-films-button",
+                    id={"type": "add-to-liked-button", "id": film.movie_id},
+                    n_clicks=0,
                 ),
             ],
             className="big-list-item",
@@ -147,15 +150,27 @@ search_bar = html.Div(
     className="search-bar-container",
 )
 
+# The preview of the liked films selection
+liked_films = html.Div(
+    len(liked_films_cache),
+    className="liked-films-container",
+    id="liked-films-container",
+)
+
 
 # Main layout for the search page
 def get_layout():
     global film_cache
     film_cache = get_random_films(15)
+
     big_list = html.Div(
         get_film_as_html(film_cache), className="big-list", id="big-list"
     )
-    return html.Div([search_bar, big_list])
+
+    # 💡 Container for liked films
+    liked_films_container = html.Div(id="liked-films-container")
+
+    return html.Div([search_bar, big_list, liked_films_container])
 
 
 # 🔥 Register Callbacks
@@ -184,3 +199,25 @@ def register_callbacks(app):
         else:
             print("No movies found.")
             return [html.Div("No movies found.", className="no-results")]
+
+    @app.callback(
+        Output("liked-films-container", "children"),
+        [Input({"type": "add-to-liked-button", "id": ALL}, "n_clicks")],
+        [State({"type": "add-to-liked-button", "id": ALL}, "id")],
+    )
+    def add_to_liked_films(n_clicks, button_ids):
+        global film_cache, liked_films_cache
+
+        if not any(n_clicks):
+            return "nothing"
+
+        for n_click, button_id in zip(n_clicks, button_ids):
+            if n_click:
+                film_to_add = next(
+                    (film for film in film_cache if film.movie_id == button_id["id"]),
+                    None,
+                )
+                if film_to_add and film_to_add not in liked_films_cache:
+                    liked_films_cache.append(film_to_add)
+
+        return html.Div([html.Div(film.title) for film in liked_films_cache])
