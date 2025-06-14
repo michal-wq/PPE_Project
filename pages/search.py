@@ -5,6 +5,7 @@ import pandas as pd
 from typing import List, Union, Optional, Any
 
 
+# Film class, which will be used for
 class Film:
     def __init__(
         self, movie_id: str, imdb_id: str, title: str, release_year: int, genres: str
@@ -16,7 +17,8 @@ class Film:
         self.genres: List[str] = genres.split("|")
 
 
-film_cache: List[Film] = []
+all_films_cache: List[Film] = []
+saved_films_cache: List[Film] = []
 liked_films_cache: List[Film] = []
 
 
@@ -54,8 +56,8 @@ def get_random_films(number: Optional[int]) -> List[Film]:
         )
         films_list.append(film)
 
-    global film_cache
-    film_cache = films_list
+    global all_films_cache
+    all_films_cache = films_list
 
     return films_list
 
@@ -96,8 +98,8 @@ def get_films_by_title(title_query: str) -> List[Film]:
         )
         films_list.append(film)
 
-    global film_cache
-    film_cache = films_list
+    global all_films_cache
+    all_films_cache = films_list
 
     return films_list
 
@@ -172,11 +174,11 @@ liked_films: html.Div = html.Div(
 
 
 def get_layout() -> html.Div:
-    global film_cache
-    film_cache = get_random_films(15)
+    global all_films_cache
+    all_films_cache = get_random_films(15)
 
     big_list: html.Div = html.Div(
-        get_film_as_html(film_cache), className="big-list", id="big-list"
+        get_film_as_html(all_films_cache), className="big-list", id="big-list"
     )
     liked_films_container: html.Div = html.Div(id="liked-films-container")
 
@@ -192,10 +194,10 @@ def register_callbacks(app: Dash) -> None:
     def perform_search(
         n_clicks: Optional[int], search_value: str
     ) -> Union[List[html.Div], None]:
-        global film_cache
+        global all_films_cache
 
         if not n_clicks:
-            return get_film_as_html(film_cache)
+            return get_film_as_html(all_films_cache)
 
         if not search_value:
             return [
@@ -217,22 +219,22 @@ def register_callbacks(app: Dash) -> None:
     def add_to_liked_films(
         n_clicks: List[int], button_ids: List[dict[str, Any]]
     ) -> html.Div:
-        global film_cache, liked_films_cache
-
         if not any(n_clicks):
             return html.Div("")
 
+        global all_films_cache, liked_films_cache
+        liked_films_cache = []
+
         for n_click, button_id in zip(n_clicks, button_ids):
-            if n_click:
-                film_to_add = next(
-                    (
-                        film
-                        for film in film_cache
-                        if film.movie_id == button_id.get("id")
-                    ),
-                    None,
+            selected_film = next(
+                (
+                    film
+                    for film in all_films_cache
+                    if film.movie_id == button_id.get("id")
                 )
-                if film_to_add and film_to_add not in liked_films_cache:
-                    liked_films_cache.append(film_to_add)
+            )
+
+            if n_click % 2 == 1:
+                liked_films_cache.append(selected_film)
 
         return html.Div([html.Div(film.title) for film in liked_films_cache])
