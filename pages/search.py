@@ -1,29 +1,33 @@
-from dash import dash, html, dcc
+from __future__ import annotations
+from dash import html, dcc, Dash
 from dash.dependencies import Output, Input, State, ALL
 import pandas as pd
+from typing import List, Union, Optional, Any
 
 
 class Film:
-    def __init__(self, movie_id, imdb_id, title, release_year, genres):
-        self.movie_id = movie_id
-        self.imdb_id = imdb_id
-        self.title = title
-        self.release_year = release_year
-        self.genres = genres.split("|")
+    def __init__(
+        self, movie_id: str, imdb_id: str, title: str, release_year: int, genres: str
+    ) -> None:
+        self.movie_id: str = movie_id
+        self.imdb_id: str = imdb_id
+        self.title: str = title
+        self.release_year: int = release_year
+        self.genres: List[str] = genres.split("|")
 
 
-film_cache = []
-liked_films_cache = []
+film_cache: List[Film] = []
+liked_films_cache: List[Film] = []
 
 
-def get_random_films(number):
-    films_list = []
+def get_random_films(number: Optional[int]) -> List[Film]:
+    films_list: List[Film] = []
 
     if number is None or number < 1:
         return films_list
 
-    df_movies = pd.read_csv("./Data/raw/movies.csv")
-    df_links = pd.read_csv("./Data/raw/links.csv")
+    df_movies: pd.DataFrame = pd.read_csv("./Data/raw/movies.csv")
+    df_links: pd.DataFrame = pd.read_csv("./Data/raw/links.csv")
 
     merged_df = pd.merge(df_movies, df_links, on="movieId")
     merged_df.drop(columns=["tmdbId"], inplace=True)
@@ -32,11 +36,21 @@ def get_random_films(number):
         r"\s*\(\d{4}\)\s*", "", regex=True
     )
 
-    subset_df = merged_df.sample(number)
+    subset_df: pd.DataFrame = merged_df.sample(n=number)
 
-    for index, row in subset_df.iterrows():
+    for _, row in subset_df.iterrows():
+        year_str: str = str(row["year"]) if pd.notna(row["year"]) else "0"
+        try:
+            release_year: int = int(year_str) if year_str.isdigit() else 0
+        except ValueError:
+            release_year = 0
+
         film = Film(
-            row["movieId"], row["imdbId"], row["title"], row["year"], row["genres"]
+            movie_id=str(row["movieId"]),
+            imdb_id=str(row["imdbId"]),
+            title=str(row["title"]),
+            release_year=release_year,
+            genres=str(row["genres"]),
         )
         films_list.append(film)
 
@@ -46,51 +60,53 @@ def get_random_films(number):
     return films_list
 
 
-def get_films_by_title(title_query):
-    films_list = []
+def get_films_by_title(title_query: str) -> List[Film]:
+    films_list: List[Film] = []
 
-    # If the query is None or empty, return an empty list
     if not title_query or len(title_query.strip()) == 0:
         return films_list
 
-    # Read the CSV files
     df_movies = pd.read_csv("./Data/raw/movies.csv")
     df_links = pd.read_csv("./Data/raw/links.csv")
 
-    # Merge the two DataFrames
     merged_df = pd.merge(df_movies, df_links, on="movieId")
     merged_df.drop(columns=["tmdbId"], inplace=True)
-
-    # Extract the year and clean the title
     merged_df["year"] = merged_df["title"].str.extract(r"\((\d{4})\)")
     merged_df["title"] = merged_df["title"].str.replace(
         r"\s*\(\d{4}\)\s*", "", regex=True
     )
 
-    # 🔍 **Filter by the search query (case-insensitive)**
     subset_df = merged_df[
         merged_df["title"].str.contains(title_query, case=False, na=False)
     ]
 
-    # Build the list of Film objects
     for _, row in subset_df.iterrows():
+        year_str: str = str(row["year"]) if pd.notna(row["year"]) else "0"
+        try:
+            release_year: int = int(year_str) if year_str.isdigit() else 0
+        except ValueError:
+            release_year = 0
+
         film = Film(
-            row["movieId"], row["imdbId"], row["title"], row["year"], row["genres"]
+            movie_id=str(row["movieId"]),
+            imdb_id=str(row["imdbId"]),
+            title=str(row["title"]),
+            release_year=release_year,
+            genres=str(row["genres"]),
         )
         films_list.append(film)
 
-    # Update the global cache
     global film_cache
     film_cache = films_list
 
     return films_list
 
 
-def get_film_as_html(film_list):
+def get_film_as_html(film_list: List[Film]) -> Optional[List[html.Div]]:
     if not film_list:
         return None
 
-    html_list = [
+    return [
         html.Div(
             [
                 html.Div(None, className="big-list-item-preview-pic"),
@@ -104,7 +120,7 @@ def get_film_as_html(film_list):
                 html.Div(
                     [
                         html.H3(film.title, className="big-list-item-title"),
-                        html.H5(film.release_year, className="big-list-item-year"),
+                        html.H5(str(film.release_year), className="big-list-item-year"),
                     ],
                     className="big-list-item-title-year",
                 ),
@@ -122,11 +138,9 @@ def get_film_as_html(film_list):
         )
         for film in film_list
     ]
-    return html_list
 
 
-# The search bar component
-search_bar = html.Div(
+search_bar: html.Div = html.Div(
     [
         html.Img(src="./assets/img/Logo.svg", className="search-bar-logo"),
         html.Div(
@@ -135,7 +149,7 @@ search_bar = html.Div(
                     id="search-bar-input",
                     type="text",
                     placeholder="Search...",
-                    value="",  # <-- Ensure it is initialized as an empty string
+                    value="",
                     debounce=True,
                 ),
                 html.Button(
@@ -150,40 +164,37 @@ search_bar = html.Div(
     className="search-bar-container",
 )
 
-# The preview of the liked films selection
-liked_films = html.Div(
+liked_films: html.Div = html.Div(
     len(liked_films_cache),
     className="liked-films-container",
     id="liked-films-container",
 )
 
 
-# Main layout for the search page
-def get_layout():
+def get_layout() -> html.Div:
     global film_cache
     film_cache = get_random_films(15)
 
-    big_list = html.Div(
+    big_list: html.Div = html.Div(
         get_film_as_html(film_cache), className="big-list", id="big-list"
     )
-
-    # 💡 Container for liked films
-    liked_films_container = html.Div(id="liked-films-container")
+    liked_films_container: html.Div = html.Div(id="liked-films-container")
 
     return html.Div([search_bar, big_list, liked_films_container])
 
 
-# 🔥 Register Callbacks
-def register_callbacks(app):
-
+def register_callbacks(app: Dash) -> None:
     @app.callback(
         Output("big-list", "children"),
         [Input("search-button", "n_clicks")],
         [Input("search-bar-input", "value")],
     )
-    def perform_search(n_clicks, search_value):
-        if n_clicks is None or n_clicks == 0:
-            global film_cache
+    def perform_search(
+        n_clicks: Optional[int], search_value: str
+    ) -> Union[List[html.Div], None]:
+        global film_cache
+
+        if not n_clicks:
             return get_film_as_html(film_cache)
 
         if not search_value:
@@ -194,27 +205,31 @@ def register_callbacks(app):
         films = get_films_by_title(search_value)
 
         if films:
-            print(f"Found {len(films)} movies.")
             return get_film_as_html(films)
-        else:
-            print("No movies found.")
-            return [html.Div("No movies found.", className="no-results")]
+
+        return [html.Div("No movies found.", className="no-results")]
 
     @app.callback(
         Output("liked-films-container", "children"),
         [Input({"type": "add-to-liked-button", "id": ALL}, "n_clicks")],
         [State({"type": "add-to-liked-button", "id": ALL}, "id")],
     )
-    def add_to_liked_films(n_clicks, button_ids):
+    def add_to_liked_films(
+        n_clicks: List[int], button_ids: List[dict[str, Any]]
+    ) -> html.Div:
         global film_cache, liked_films_cache
 
         if not any(n_clicks):
-            return "nothing"
+            return html.Div("")
 
         for n_click, button_id in zip(n_clicks, button_ids):
             if n_click:
                 film_to_add = next(
-                    (film for film in film_cache if film.movie_id == button_id["id"]),
+                    (
+                        film
+                        for film in film_cache
+                        if film.movie_id == button_id.get("id")
+                    ),
                     None,
                 )
                 if film_to_add and film_to_add not in liked_films_cache:
