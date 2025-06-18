@@ -1,8 +1,6 @@
 from typing import List
 from dash import html
 from pages import search
-
-
 from pages.search import Film
 
 # Recommended film lists (mock data)
