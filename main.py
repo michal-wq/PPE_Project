@@ -1,5 +1,5 @@
 from dash import ALL, Dash, Input, Output, ctx, html
-from pages import evaluation, home, search
+from pages import evaluation, home, search, imprint
 from dash.exceptions import PreventUpdate
 
 
@@ -28,14 +28,17 @@ def route_handler(n_clicks):
 
     route = triggered.get("route")
 
-    if route == "search":
-        return search.get_layout()
-    elif route == "evaluation":
-        return evaluation.get_layout()
-    elif route == "home":
-        return home.get_layout()
-    else:
-        return html.Div("404 – Page Not Found")
+    match route:
+        case "search":
+            return search.get_layout()
+        case "evaluation":
+            return evaluation.get_layout()
+        case "home":
+            return home.get_layout()
+        case "imprint":
+            return imprint.get_layout()
+        case _:
+            return html.Div("404 – Page Not Found")
 
 
 search.register_callbacks(app)
