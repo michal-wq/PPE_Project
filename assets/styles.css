@@ -242,6 +242,7 @@ body {
     width: 100%;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: .5rem;
 }
 
@@ -256,6 +257,7 @@ body {
 .big-list-item .big-list-item-title-year {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -300,4 +302,25 @@ body {
     min-width: 10%;
     max-width: 50%;
     display: flex;
+}
+
+.recommendation-category {
+    width: 100%;
+}
+
+.recommendation-category-list {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.recommendation-category-list .big-list-item {
+    width: 12.5rem;
+    height: 15rem;
+}
+
+.recommendation-category .recommendation-category-list .big-list-item .big-list-item-genre-chips {
+    font-size: small;
 }

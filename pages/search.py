@@ -118,7 +118,7 @@ def get_films_by_title(title_query: str) -> List[Film]:
     return films_list
 
 
-def get_film_as_html(film_list: List[Film]) -> Optional[List[html.Div]]:
+def get_film_as_html(film_list: List[Film], mode="search") -> Optional[List[html.Div]]:
     if not film_list:
         return None
 
@@ -140,14 +140,18 @@ def get_film_as_html(film_list: List[Film]) -> Optional[List[html.Div]]:
                     ],
                     className="big-list-item-title-year",
                 ),
-                html.Button(
-                    [
-                        html.Img(src="../assets/icons/add-circle.svg"),
-                        "Add to liked films",
-                    ],
-                    className="big-list-item-add-to-liked-films-button",
-                    id={"type": "add-to-liked-button", "id": film.movie_id},
-                    n_clicks=0,
+                (
+                    html.Button(
+                        [
+                            html.Img(src="../assets/icons/add-circle.svg"),
+                            "Add to liked films",
+                        ],
+                        className="big-list-item-add-to-liked-films-button",
+                        id={"type": "add-to-liked-button", "id": film.movie_id},
+                        n_clicks=0,
+                    )
+                    if mode == "search"
+                    else None
                 ),
             ],
             className="big-list-item",
@@ -289,7 +293,7 @@ def register_callbacks(app: Dash) -> None:
                         html.Img(src="../assets/icons/done.svg"),
                         "evaluate shiiii",
                     ],
-                    className="eval-button button-secondary",
+                    className="eval-button button-primary",
                     id={"type": "nav-button", "route": "evaluation"},
                     n_clicks=0,
                 ),
