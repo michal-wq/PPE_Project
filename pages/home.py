@@ -13,7 +13,11 @@ layout = html.Div(
                     id={"type": "nav-button", "route": "search"},
                     n_clicks=0,
                 ),
-                html.Button("Imprint", className="button-secondary"),
+                html.Button(
+                    "Imprint",
+                    className="button-secondary",
+                    id={"type": "nav-button", "route": "imprint"},
+                ),
             ],
             className="homepage-button-container",
         ),
