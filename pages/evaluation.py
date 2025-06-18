@@ -2,7 +2,7 @@ from dash import html
 from dash.dependencies import Output, Input
 
 layout = html.Div(
-    ["ik ben het an werken"],
+    ["ik ben het aan werken"],
     className="homepage-content",
 )
 
