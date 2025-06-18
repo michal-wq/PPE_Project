@@ -278,3 +278,26 @@ body {
 .liked-films-container {
     height: 100px;
 }
+
+.footer-eval-container {
+    height: 100px;
+    width: 100%;
+    padding: calc(2 * var(--standard-padding));
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.eval-button {
+    background-color: rgb(255, 255, 255, 0);
+    border-color: var(--color-white-75);
+    border-width: 2.5px;
+    border-style: solid;
+    font-size: medium;
+    padding: var(--standard-padding);
+
+    min-width: 10%;
+    max-width: 50%;
+    display: flex;
+}
