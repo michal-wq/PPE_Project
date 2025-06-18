@@ -3,7 +3,6 @@ from dash import ctx, html, dcc, Dash
 from dash.dependencies import Output, Input, State, ALL
 import pandas as pd
 from typing import List, Union, Optional, Any
-from pages import evaluation
 
 
 # Film class, which will be used for
@@ -32,7 +31,7 @@ def update_all_films_cache():
     for film in shown_films_cache:
         if film.movie_id not in existing_ids:
             all_films_cache.append(film)
-            existing_ids.add(film.movie_id)  # update to prevent duplicates within loop
+            existing_ids.add(film.movie_id)
 
 
 def get_random_films(number: Optional[int]) -> List[Film]:
