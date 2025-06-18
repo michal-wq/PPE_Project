@@ -1,5 +1,6 @@
 from dash import ALL, Dash, Input, Output, ctx, html
 from pages import evaluation, home, search
+from dash.exceptions import PreventUpdate
 
 
 # Initialising the page
@@ -15,20 +16,26 @@ app.config.suppress_callback_exceptions = True
 def route_handler(n_clicks):
     triggered = ctx.triggered_id
 
+    # Guard: only act if a button was actually clicked
     if not triggered:
         return home.get_layout()
 
+    i = [i for i, btn_id in enumerate(ctx.inputs_list[0]) if btn_id["id"] == triggered][
+        0
+    ]
+    if n_clicks[i] is None or n_clicks[i] < 1:
+        raise PreventUpdate
+
     route = triggered.get("route")
 
-    match route:
-        case "home":
-            return home.get_layout()
-        case "search":
-            return search.get_layout()
-        case "evaluation":
-            return evaluation.get_layout()
-        case _:
-            return html.Div("404 – Page Not Found")
+    if route == "search":
+        return search.get_layout()
+    elif route == "evaluation":
+        return evaluation.get_layout()
+    elif route == "home":
+        return home.get_layout()
+    else:
+        return html.Div("404 – Page Not Found")
 
 
 search.register_callbacks(app)
