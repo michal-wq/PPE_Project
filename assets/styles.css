@@ -314,6 +314,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    overflow: auto;
 }
 
 .recommendation-category-list .big-list-item {

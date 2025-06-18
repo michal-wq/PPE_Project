@@ -125,7 +125,11 @@ def get_film_as_html(film_list: List[Film], mode="search") -> Optional[List[html
     return [
         html.Div(
             [
-                html.Div(None, className="big-list-item-preview-pic"),
+                (
+                    html.Div(None, className="big-list-item-preview-pic")
+                    if mode == "search"
+                    else None
+                ),
                 html.Div(
                     [
                         html.Div(genre, className="big-list-item-genre-chip")
