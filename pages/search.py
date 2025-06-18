@@ -1,8 +1,9 @@
 from __future__ import annotations
-from dash import html, dcc, Dash
+from dash import ctx, html, dcc, Dash
 from dash.dependencies import Output, Input, State, ALL
 import pandas as pd
 from typing import List, Union, Optional, Any
+from pages import evaluation
 
 
 # Film class, which will be used for
@@ -17,9 +18,21 @@ class Film:
         self.genres: List[str] = genres.split("|")
 
 
+# Instancing necessary
 all_films_cache: List[Film] = []
-saved_films_cache: List[Film] = []
-liked_films_cache: List[Film] = []
+shown_films_cache: List[Film] = []
+selected_films_cache: List[Film] = []
+
+
+def update_all_films_cache():
+    global all_films_cache, shown_films_cache
+
+    existing_ids = {film.movie_id for film in all_films_cache}
+
+    for film in shown_films_cache:
+        if film.movie_id not in existing_ids:
+            all_films_cache.append(film)
+            existing_ids.add(film.movie_id)  # update to prevent duplicates within loop
 
 
 def get_random_films(number: Optional[int]) -> List[Film]:
@@ -56,8 +69,9 @@ def get_random_films(number: Optional[int]) -> List[Film]:
         )
         films_list.append(film)
 
-    global all_films_cache
-    all_films_cache = films_list
+    global shown_films_cache
+    shown_films_cache = films_list
+    update_all_films_cache()
 
     return films_list
 
@@ -98,8 +112,9 @@ def get_films_by_title(title_query: str) -> List[Film]:
         )
         films_list.append(film)
 
-    global all_films_cache
-    all_films_cache = films_list
+    global shown_films_cache
+    shown_films_cache = films_list
+    update_all_films_cache()
 
     return films_list
 
@@ -167,18 +182,19 @@ search_bar: html.Div = html.Div(
 )
 
 liked_films: html.Div = html.Div(
-    len(liked_films_cache),
+    len(selected_films_cache),
     className="liked-films-container",
     id="liked-films-container",
 )
 
 
 def get_layout() -> html.Div:
-    global all_films_cache
-    all_films_cache = get_random_films(15)
+    global shown_films_cache
+    shown_films_cache = get_random_films(15)
+    update_all_films_cache()
 
     big_list: html.Div = html.Div(
-        get_film_as_html(all_films_cache), className="big-list", id="big-list"
+        get_film_as_html(shown_films_cache), className="big-list", id="big-list"
     )
     liked_films_container: html.Div = html.Div(id="liked-films-container")
 
@@ -194,10 +210,10 @@ def register_callbacks(app: Dash) -> None:
     def perform_search(
         n_clicks: Optional[int], search_value: str
     ) -> Union[List[html.Div], None]:
-        global all_films_cache
+        global shown_films_cache
 
         if not n_clicks:
-            return get_film_as_html(all_films_cache)
+            return get_film_as_html(shown_films_cache)
 
         if not search_value:
             return [
@@ -219,11 +235,12 @@ def register_callbacks(app: Dash) -> None:
     def add_to_liked_films(
         n_clicks: List[int], button_ids: List[dict[str, Any]]
     ) -> html.Div:
-        if not any(n_clicks):
-            return html.Div("")
 
-        global all_films_cache, liked_films_cache
-        liked_films_cache = []
+        triggered = ctx.triggered_id
+
+        global all_films_cache, shown_films_cache, selected_films_cache
+
+        selected_films_ids = {film.movie_id for film in selected_films_cache}
 
         for n_click, button_id in zip(n_clicks, button_ids):
             selected_film = next(
@@ -231,10 +248,52 @@ def register_callbacks(app: Dash) -> None:
                     film
                     for film in all_films_cache
                     if film.movie_id == button_id.get("id")
-                )
+                ),
+                None,
             )
 
-            if n_click % 2 == 1:
-                liked_films_cache.append(selected_film)
+            selected_film_id = (
+                selected_film.movie_id if selected_film is not None else ""
+            )
 
-        return html.Div([html.Div(film.title) for film in liked_films_cache])
+            if (
+                (n_click != 0 or n_click is not None)
+                and n_click % 2 == 1
+                and selected_film is not None
+                and selected_film_id not in selected_films_ids
+            ):
+                selected_films_cache.append(selected_film)
+
+            elif (
+                (n_click != 0 or n_click is not None)
+                and n_click % 2 == 0
+                and selected_film_id in selected_films_ids
+            ):
+                film_to_deselect = next(
+                    (
+                        film
+                        for film in selected_films_cache
+                        if film.movie_id == selected_film_id
+                    ),
+                    None,
+                )
+                if film_to_deselect is not None:
+                    selected_films_cache.remove(film_to_deselect)
+
+        return html.Div(
+            [
+                html.Div(
+                    [html.Div(film.title) for film in selected_films_cache] or " "
+                ),
+                html.Button(
+                    [
+                        html.Img(src="../assets/icons/done.svg"),
+                        "evaluate shiiii",
+                    ],
+                    className="eval-button button-secondary",
+                    id={"type": "nav-button", "route": "evaluation"},
+                    n_clicks=0,
+                ),
+            ],
+            className="footer-eval-container",
+        )
