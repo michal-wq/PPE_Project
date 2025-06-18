@@ -223,9 +223,9 @@ def register_callbacks(app: Dash) -> None:
             return get_film_as_html(shown_films_cache)
 
         if not search_value:
-            return [
-                html.Div("Enter a search query to find movies.", className="no-results")
-            ]
+            shown_films_cache = get_random_films(15)
+            update_all_films_cache()
+            return get_film_as_html(shown_films_cache)
 
         films = get_films_by_title(search_value)
 
