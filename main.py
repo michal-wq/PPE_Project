@@ -1,7 +1,7 @@
 from dash import ALL, Dash, Input, Output, ctx, html
 from pages import evaluation, home, search, imprint
 from dash.exceptions import PreventUpdate
-
+import state
 
 # Initialising the page
 app = Dash(__name__)
@@ -20,6 +20,7 @@ def route_handler(n_clicks):
     if not triggered:
         return home.get_layout()
 
+    global user_inputs, min_rating, max_rating
     i = [i for i, btn_id in enumerate(ctx.inputs_list[0]) if btn_id["id"] == triggered][
         0
     ]
@@ -32,7 +33,10 @@ def route_handler(n_clicks):
         case "search":
             return search.get_layout()
         case "evaluation":
-            return evaluation.get_layout()
+            state.reset_page_vars()
+            return evaluation.get_layout(
+                state.user_inputs, state.min_rating, state.max_rating
+            )
         case "home":
             return home.get_layout()
         case "imprint":
