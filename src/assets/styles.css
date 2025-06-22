@@ -1,0 +1,327 @@
+/* Variables */
+:root {
+    /* colors */
+    /* background gradient colors */
+    --color-background-gradient-1: rgba(20, 39, 38, 1);
+    --color-background-gradient-2: rgba(33, 27, 23, 1);
+    --color-background-gradient-3: rgba(23, 10, 8, 1);
+
+
+    --color-primary: #ce7979;
+    --color-secondary: rgba (0, 0, 0, 1);
+    --color-transparent: rgba (0, 0, 0, 0);
+
+    --color-white-100: rgba(255, 255, 255, 1);
+    --color-white-75: rgba(255, 255, 255, 0.75);
+    --color-white-5: rgba(255, 255, 255, 0.5);
+    --color-white-25: rgba(255, 255, 255, 0.25);
+
+    /* standard margins, paddings, other numeric values */
+    --standard-margin: 5px;
+    --standard-padding: 10px;
+    --standard-border-radius: 5px;
+
+    /* chip margins, paddings, other numeric values */
+    --chip-border-radius: 25px;
+
+    /* desktop specific numeric values */
+    --flex-gap: 0.5rem;
+
+    /* tablet specific numeric values */
+
+    /* mobile specific numeric values */
+
+}
+
+/* 1. Use a more-intuitive box-sizing model */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* 2. Remove default margin */
+* {
+    color: var(--color-white-100);
+    font-family: Helvetica, sans-serif;
+    font-weight: 750;
+    margin: 0;
+    padding: 0;
+}
+
+/* 3. Enable keyword animations */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        interpolate-size: allow-keywords;
+    }
+}
+
+body {
+    /* 4. Add accessible line-height */
+    line-height: 1.5;
+    /* 5. Improve text rendering */
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 6. Improve media defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+/* 7. Inherit fonts for form controls */
+input,
+button,
+textarea,
+select {
+    all: unset;
+    box-shadow: none;
+    font: inherit;
+    padding: var(--standard-padding);
+    border-radius: var(--standard-border-radius);
+}
+
+button {
+    cursor: pointer;
+    text-align: center;
+}
+
+input {
+    height: 48px;
+    padding: 0;
+}
+
+/* 8. Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+/* 9. Improve line wrapping */
+p {
+    text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-wrap: balance;
+}
+
+/*
+  10. Create a root stacking context
+*/
+#root,
+#__next {
+    isolation: isolate;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background: var(--color-background-gradient-1);
+    background: linear-gradient(90deg, var(--color-background-gradient-1) 0%, var(--color-background-gradient-2) 50%, var(--color-background-gradient-3) 100%);
+}
+
+#_dash-app-content,
+#app-content {
+    width: 100vw;
+    height: 100vh;
+}
+
+/* homepage */
+.homepage-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--flex-gap);
+}
+
+.homepage-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--flex-gap);
+}
+
+.button-primary {
+    width: 100%;
+    background-color: var(--color-primary);
+}
+
+.button-secondary {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: var(--color-primary);
+    border-width: 2.5px;
+    border-style: solid;
+}
+
+/* search page */
+.search-bar-container {
+    height: 100px;
+    width: 100%;
+    padding: calc(2 * var(--standard-padding));
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.search-bar-container .search-bar-logo {
+    height: 100px;
+}
+
+.search-bar-container .search-bar-field {
+    height: 50.5px;
+    width: calc(100%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-style: solid;
+    border-radius: var(--standard-border-radius);
+}
+
+.search-bar-container .search-bar-field #search-bar-input {
+    width: calc(100% - 24px);
+    border-width: .5px;
+    border-color: var(--color-white-75);
+    border-style: solid;
+    padding: 0 var(--standard-padding);
+}
+
+.big-list {
+    width: 100%;
+    height: calc(100vh - 200px);
+    padding: calc(2 * var(--standard-padding));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+.big-list-item {
+    width: 25rem;
+    margin: var(--standard-margin);
+    padding: var(--standard-padding);
+    border-color: rgb(255, 255, 255, 0.25);
+    border-width: 2.5px;
+    border-radius: var(--standard-border-radius);
+    border-style: solid;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.big-list-item .big-list-item-preview-pic {
+    height: 150px;
+    /* width: 100%; */
+    border-color: rgb(255, 255, 255, 0.5);
+    border-width: 2.5px;
+    border-radius: var(--standard-border-radius);
+    background-color: #a23f3f;
+}
+
+.big-list-item .big-list-item-genre-chips {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.big-list-item .big-list-item-genre-chips .big-list-item-genre-chip {
+    font-size: small;
+    background-color: #987C7C;
+    padding: 5px 10px;
+    border-radius: 25px;
+    box-sizing: border-box;
+}
+
+.big-list-item .big-list-item-title-year {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.big-list-item .big-list-item-add-to-liked-films-button {
+    background-color: rgb(255, 255, 255, 0);
+    border-color: var(--color-white-75);
+    border-width: 2.5px;
+    border-style: solid;
+    font-size: medium;
+    padding: var(--standard-padding);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.liked-films-container {
+    height: 100px;
+}
+
+.footer-eval-container {
+    height: 100px;
+    width: 100%;
+    padding: calc(2 * var(--standard-padding));
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.eval-button {
+    background-color: rgb(255, 255, 255, 0);
+    border-color: var(--color-white-75);
+    border-width: 2.5px;
+    border-style: solid;
+    font-size: medium;
+    padding: var(--standard-padding);
+
+    min-width: 10%;
+    max-width: 50%;
+    display: flex;
+}
+
+.recommendation-category {
+    width: 100%;
+}
+
+.recommendation-category-list {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow: auto;
+}
+
+.recommendation-category-list .big-list-item {
+    width: 12.5rem;
+    height: 15rem;
+}
+
+.recommendation-category .recommendation-category-list .big-list-item .big-list-item-genre-chips {
+    font-size: small;
+}
