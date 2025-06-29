@@ -20,11 +20,12 @@ shown_films_cache: List[Film] = []
 selected_films_cache: List[Film] = []
 
 
-def reset_page_vars():
-    global all_films_cache, shown_films_cache, selected_films_cache
+def reset_search_page_vars():
+    global user_inputs, all_films_cache, shown_films_cache, selected_films_cache
     all_films_cache = []
     shown_films_cache = []
     selected_films_cache = []
+    user_inputs = []
 
 
 # Evaluation vars
@@ -38,6 +39,8 @@ recommended_films_classics: List[Film] = []
 recommended_films_new_timers: List[Film] = []
 
 
-def reset_evaluation_vars():
-    global user_inputs
-    user_inputs = []
+def reset_evaluation_page_vars():
+    global user_inputs, recommended_films_all_time, recommended_films_classics, recommended_films_new_timers
+    recommended_films_all_time = []
+    recommended_films_classics = []
+    recommended_films_new_timers = []

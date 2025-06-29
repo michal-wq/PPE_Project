@@ -31,9 +31,10 @@ def route_handler(n_clicks):
 
     match route:
         case "search":
+            state.reset_search_page_vars()
             return search.get_layout()
         case "evaluation":
-            state.reset_page_vars()
+            state.reset_evaluation_page_vars()
             return evaluation.get_layout(
                 state.user_inputs, state.min_rating, state.max_rating
             )

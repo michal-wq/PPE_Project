@@ -94,9 +94,7 @@ def get_films_by_title(title_query: str) -> List[state.Film]:
     return films_list
 
 
-def get_film_as_html(
-    film_list: List[state.Film], mode="search"
-) -> Optional[List[html.Div]]:
+def get_films_as_html(film_list: List[state.Film], mode="search"):
     if not film_list:
         return None
 
@@ -105,7 +103,7 @@ def get_film_as_html(
             [
                 (
                     html.Div(None, className="big-list-item-preview-pic")
-                    if mode == "search"
+                    if mode != "search"
                     else None
                 ),
                 html.Div(
@@ -174,15 +172,21 @@ liked_films: html.Div = html.Div(
 
 
 def get_layout() -> html.Div:
-    state.shown_films_cache = get_random_films(15)
+    state.shown_films_cache = get_random_films(30)
     update_all_films_cache()
 
     big_list: html.Div = html.Div(
-        get_film_as_html(state.shown_films_cache), className="big-list", id="big-list"
+        get_films_as_html(state.shown_films_cache), className="big-list", id="big-list"
     )
     liked_films_container: html.Div = html.Div(id="liked-films-container")
 
-    return html.Div([search_bar, big_list, liked_films_container])
+    return html.Div(
+        [
+            search_bar,
+            big_list,
+            liked_films_container,
+        ]
+    )
 
 
 def register_callbacks(app: Dash) -> None:
@@ -196,17 +200,17 @@ def register_callbacks(app: Dash) -> None:
     ) -> Union[List[html.Div], None]:
 
         if not n_clicks:
-            return get_film_as_html(state.shown_films_cache)
+            return get_films_as_html(state.shown_films_cache)
 
         if not search_value:
-            state.shown_films_cache = get_random_films(15)
+            state.shown_films_cache = get_random_films(30)
             update_all_films_cache()
-            return get_film_as_html(state.shown_films_cache)
+            return get_films_as_html(state.shown_films_cache)
 
         films = get_films_by_title(search_value)
 
         if films:
-            return get_film_as_html(films)
+            return get_films_as_html(films)
 
         return [html.Div("No movies found.", className="no-results")]
 
@@ -263,16 +267,29 @@ def register_callbacks(app: Dash) -> None:
         return html.Div(
             [
                 html.Div(
-                    [html.Div(film.title) for film in state.selected_films_cache] or " "
+                    f"{len(state.selected_films_cache)}",
+                    style=(
+                        {"color": "red"}
+                        if len(state.selected_films_cache) < 3
+                        else {"color": "green"}
+                    ),
                 ),
                 html.Button(
                     [
                         html.Img(src="../assets/icons/done.svg"),
-                        "evaluate shiiii",
+                        "Recommend me films",
                     ],
-                    className="eval-button button-primary",
+                    className=(
+                        "button-primary eval-button"
+                        + (
+                            " disabled-eval-button"
+                            if len(state.selected_films_cache) < 3
+                            else ""
+                        )
+                    ),
                     id={"type": "nav-button", "route": "evaluation"},
                     n_clicks=0,
+                    disabled=len(state.selected_films_cache) < 3,
                 ),
             ],
             className="footer-eval-container",

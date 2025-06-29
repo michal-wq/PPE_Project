@@ -292,16 +292,24 @@ body {
 }
 
 .eval-button {
-    background-color: rgb(255, 255, 255, 0);
-    border-color: var(--color-white-75);
+    background-color: var(--color-background-gradient-1);
+    border-color: var(--color-background-gradient-2);
     border-width: 2.5px;
     border-style: solid;
     font-size: medium;
     padding: var(--standard-padding);
 
     min-width: 10%;
-    max-width: 50%;
+    max-width: 25%;
     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.disabled-eval-button {
+    background-color: var(--color-white-25);
+    border-color: var(--color-background-gradient-2);
+    color: gray;
 }
 
 .recommendation-category {
@@ -318,8 +326,8 @@ body {
 }
 
 .recommendation-category-list .big-list-item {
-    width: 12.5rem;
-    height: 15rem;
+    width: 15rem;
+    height: 20rem;
 }
 
 .recommendation-category .recommendation-category-list .big-list-item .big-list-item-genre-chips {

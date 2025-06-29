@@ -19,7 +19,7 @@ def get_layout(
                         [
                             html.H3("All time"),
                             html.Div(
-                                search.get_film_as_html(
+                                search.get_films_as_html(
                                     state.recommended_films_all_time, "evaluation"
                                 )
                                 or [],
@@ -32,7 +32,7 @@ def get_layout(
                         [
                             html.H3("Classics"),
                             html.Div(
-                                search.get_film_as_html(
+                                search.get_films_as_html(
                                     state.recommended_films_classics, "evaluation"
                                 )
                                 or [],
@@ -45,7 +45,7 @@ def get_layout(
                         [
                             html.H3("New timers"),
                             html.Div(
-                                search.get_film_as_html(
+                                search.get_films_as_html(
                                     state.recommended_films_new_timers, "evaluation"
                                 )
                                 or [],

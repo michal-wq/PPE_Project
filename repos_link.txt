@@ -1,0 +1,7 @@
+Dies ist das Filmempfehlungsprojekt von
+- Alessio Luigi De Icco
+- Filip Vrlec
+- Michał Ryszard Karczmarzyk
+
+Link zum Repos:
+https://github.com/michal-wq/PPE_Project.git
