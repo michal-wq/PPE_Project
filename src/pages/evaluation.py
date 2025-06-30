@@ -28,7 +28,7 @@ def get_layout(
                         [
                             html.Div(
                                 [
-                                    html.H3("All time"),
+                                    html.H2("All time"),
                                     html.Div(
                                         search.get_films_as_html(
                                             state.recommended_films_all_time,
@@ -42,7 +42,7 @@ def get_layout(
                             ),
                             html.Div(
                                 [
-                                    html.H3("Classics"),
+                                    html.H2("Classics"),
                                     html.Div(
                                         search.get_films_as_html(
                                             state.recommended_films_classics,
@@ -56,7 +56,7 @@ def get_layout(
                             ),
                             html.Div(
                                 [
-                                    html.H3("New timers"),
+                                    html.H2("New timers"),
                                     html.Div(
                                         search.get_films_as_html(
                                             state.recommended_films_new_timers,
@@ -75,13 +75,8 @@ def get_layout(
                         [
                             html.Button(
                                 "Retry",
-                                className="retry-button",
+                                className="retry-button big-list-item-add-to-liked-films-button",
                                 id={"type": "nav-button", "route": "search"},
-                            ),
-                            html.Button(
-                                "Home",
-                                className="home-button",
-                                id={"type": "nav-button", "route": "home"},
                             ),
                         ],
                         className="retry-home-buttons",

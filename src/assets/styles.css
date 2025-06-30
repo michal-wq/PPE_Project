@@ -264,7 +264,7 @@ body {
     align-items: center;
 }
 
-.big-list-item .big-list-item-add-to-liked-films-button {
+.big-list-item-add-to-liked-films-button {
     background-color: rgb(255, 255, 255, 0);
     border-color: var(--color-white-75);
     border-width: 2.5px;
@@ -386,4 +386,13 @@ body {
     flex-direction: column;
     align-items: center;
     justify-self: center;
+}
+
+.evaluation-content h2 {
+    text-align: center;
+}
+
+.retry-home-buttons {
+    display: flex;
+    gap: 20px;
 }
