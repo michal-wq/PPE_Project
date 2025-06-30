@@ -71,20 +71,26 @@ http://127.0.0.1:8050/
 
 ```
 .
+├── Data/
+│   ├── raw/                    # Original MovieLens data (movies, links, ratings, tags)
+│   ├── preprocessed/           # Cleaned feature and label data
+│   ├── preprocessed_cluster/   # Clustered feature data
+│   └── visdata/                # Aggregated data for visualisation
 ├── src/
-│   ├── main.py                  # Application entry point
-│   ├── state.py                 # Global state: caches and user inputs
-│   └── pages/                   # Dash page components
+│   ├── main.py                 # Dash app entry point
+│   ├── state.py                # Global app state (film cache, user inputs, etc.)
+│   ├── proper_recoomendation.py
+│   ├── assets/                 # Icons, logo, styles
+│   └── pages/                  # Dash page modules
 │       ├── home.py
 │       ├── search.py
 │       ├── evaluation.py
 │       ├── visualisation.py
 │       └── imprint.py
-├── Data/raw/                    # Input data (movies.csv, links.csv)
-├── assets/                      # Stylesheets, icons, logos
-├── requirements.txt             # Python package dependencies
-├── requirements.py              # (Optional) Script to generate requirements.txt
-└── README.md
+├── requirements.txt
+├── requirements.py
+├── README.md
+└── unused/                     # (contains experiments, notebooks, old scripts) [not shown]
 ```
 
 ### 📚 Data Source
