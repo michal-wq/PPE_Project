@@ -110,6 +110,33 @@ All rights to the data remain with their original owners.
 
 ---
 
+### Q&A
+
+1. Wer wäre die Zielgruppe für dieses Tool?
+
+- Die Zielgruppe sind technikinteressierte Filmfans sowie Studierende und Dozierende, die sich für Recommender-Systeme, interaktive Webapplikationen oder Datenvisualisierung im Bereich Film interessieren. Das Tool richtet sich auch an Personen, die gerne neue Filme entdecken und Empfehlungen auf Basis ihrer Präferenzen erhalten möchten – ohne Registrierung oder Dateneingabe.
+  <br>
+  <br>
+
+2. Welche Analysen sind vorgesehen?
+
+- Visualisierung von Genre-Verteilungen
+- Auswertung von Nutzerpräferenzen über ausgewählte Filme
+  <br>
+  <br>
+
+3. Wie gross sind die Daten?
+
+- `movies.csv` an sich beinhaltet 87'585 Filmeinträge
+  <br>
+  <br>
+
+4. Warum wird Userdata ignoriert?
+
+- Userdata wird ignoriert, weil sie nicht für alle Filme gleichmässig vorhanden sind. Bei manchen fehlen sie komplett, bei anderen gibt es sehr viele. Daher konzentrieren wir uns bewusst auf Genre-Informationen, um konsistente und vergleichbare Empfehlungen zu ermöglichen.“
+  <br>
+  <br>
+
 ### © License & Usage
 
 © 2025 Filip Vrlec, Michał Ryszard Karczmarzyk, Alessio Luigi De Icco
