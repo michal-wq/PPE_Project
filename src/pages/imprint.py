@@ -65,15 +65,6 @@ layout = html.Div(
                 html.P("All rights reserved unless otherwise stated."),
             ]
         ),
-        html.Div(
-            [
-                html.Button(
-                    "Home",
-                    className="home-button",
-                    id={"type": "nav-button", "route": "home"},
-                ),
-            ]
-        ),
     ],
     className="imprint-content",
 )

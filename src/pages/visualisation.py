@@ -102,5 +102,4 @@ def get_layout():
             html.H2("Durchschnittliche Bewertung nach Genre"),
             dcc.Graph(figure=fig2),
         ],
-        className="visualisation-content",
     )
