@@ -285,12 +285,7 @@ def register_callbacks(app: Dash) -> None:
             html.Div(
                 [
                     html.Div(
-                        f"{len(state.selected_films_cache)}",
-                        style=(
-                            {"color": "red"}
-                            if len(state.selected_films_cache) < 3
-                            else {"color": "green"}
-                        ),
+                        f"You've selected this many films: {len(state.selected_films_cache)}",
                     ),
                     html.Button(
                         [
