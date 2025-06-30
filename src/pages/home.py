@@ -12,7 +12,7 @@ layout = html.Div(
                     n_clicks=0,
                 ),
                 html.Button(
-                    "visualisation",
+                    "Visualisation",
                     className="button-secondary",
                     id={"type": "nav-button", "route": "visualisation"},
                 ),

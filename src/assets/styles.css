@@ -278,6 +278,36 @@ body {
     align-items: center;
 }
 
+.big-list-item-add-to-liked-films-button-bruh {
+    background-color: var(--color-primary);
+    border-color: rgb(255, 255, 255, 0);
+    border-width: 2.5px;
+    border-style: solid;
+    font-size: medium;
+    padding: var(--standard-padding);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.big-list-item-add-to-liked-films-button .add-to-liked-films-label {
+    display: flex;
+}
+
+.big-list-item-add-to-liked-films-button .deselect-label {
+    display: none;
+}
+
+.big-list-item-add-to-liked-films-button-bruh .add-to-liked-films-label {
+    display: none;
+}
+
+.big-list-item-add-to-liked-films-button-bruh .deselect-label {
+    display: flex;
+}
+
 .liked-films-container {
     height: 100px;
 }
@@ -329,7 +359,7 @@ body {
 
 .recommendation-category-list .big-list-item {
     width: 15rem;
-    height: 20rem;
+    height: 10rem;
 }
 
 .recommendation-category .recommendation-category-list .big-list-item .big-list-item-genre-chips {
@@ -355,5 +385,4 @@ body {
     flex-direction: column;
     align-items: center;
     justify-self: center;
-    text-align: center;
 }

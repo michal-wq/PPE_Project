@@ -101,11 +101,6 @@ def get_films_as_html(film_list: List[state.Film], mode="search"):
     return [
         html.Div(
             [
-                (
-                    html.Div(None, className="big-list-item-preview-pic")
-                    if mode != "search"
-                    else None
-                ),
                 html.Div(
                     [
                         html.Div(genre, className="big-list-item-genre-chip")
@@ -123,8 +118,14 @@ def get_films_as_html(film_list: List[state.Film], mode="search"):
                 (
                     html.Button(
                         [
-                            html.Img(src="../assets/icons/add-circle.svg"),
-                            "Add to liked films",
+                            html.Div(
+                                [
+                                    html.Img(src="../assets/icons/add-circle.svg"),
+                                    "Add to liked films",
+                                ],
+                                className="add-to-liked-films-label",
+                            ),
+                            html.Div("Deselect", className="deselect-label"),
                         ],
                         className="big-list-item-add-to-liked-films-button",
                         id={"type": "add-to-liked-button", "id": film.movie_id},
@@ -218,13 +219,14 @@ def register_callbacks(app: Dash) -> None:
         return [html.Div("No movies found.", className="no-results")]
 
     @app.callback(
-        Output("liked-films-container", "children"),
+        [
+            Output("liked-films-container", "children"),
+            Output({"type": "add-to-liked-button", "id": ALL}, "className"),
+        ],
         [Input({"type": "add-to-liked-button", "id": ALL}, "n_clicks")],
         [State({"type": "add-to-liked-button", "id": ALL}, "id")],
     )
-    def add_to_liked_films(
-        n_clicks: List[int], button_ids: List[dict[str, Any]]
-    ) -> html.Div:
+    def add_to_liked_films(n_clicks: List[int], button_ids: List[dict[str, Any]]):
         selected_films_ids = {film.movie_id for film in state.selected_films_cache}
 
         for n_click, button_id in zip(n_clicks, button_ids):
@@ -267,33 +269,48 @@ def register_callbacks(app: Dash) -> None:
 
             state.user_inputs = [i.title for i in state.selected_films_cache]
 
-        return html.Div(
-            [
-                html.Div(
-                    f"{len(state.selected_films_cache)}",
-                    style=(
-                        {"color": "red"}
-                        if len(state.selected_films_cache) < 3
-                        else {"color": "green"}
-                    ),
-                ),
-                html.Button(
-                    [
-                        html.Img(src="../assets/icons/done.svg"),
-                        "Recommend me films",
-                    ],
-                    className=(
-                        "button-primary eval-button"
-                        + (
-                            " disabled-eval-button"
+        button_classes = []
+
+        for button_id in button_ids:
+            movie_id = button_id.get("id")
+            is_selected = any(
+                f.movie_id == movie_id for f in state.selected_films_cache
+            )
+            if is_selected:
+                button_classes.append("big-list-item-add-to-liked-films-button-bruh")
+            else:
+                button_classes.append("big-list-item-add-to-liked-films-button")
+
+        return [
+            html.Div(
+                [
+                    html.Div(
+                        f"{len(state.selected_films_cache)}",
+                        style=(
+                            {"color": "red"}
                             if len(state.selected_films_cache) < 3
-                            else ""
-                        )
+                            else {"color": "green"}
+                        ),
                     ),
-                    id={"type": "nav-button", "route": "evaluation"},
-                    n_clicks=0,
-                    disabled=len(state.selected_films_cache) < 3,
-                ),
-            ],
-            className="footer-eval-container",
-        )
+                    html.Button(
+                        [
+                            html.Img(src="../assets/icons/done.svg"),
+                            "Recommend me films",
+                        ],
+                        className=(
+                            "button-primary eval-button"
+                            + (
+                                " disabled-eval-button"
+                                if len(state.selected_films_cache) < 3
+                                else ""
+                            )
+                        ),
+                        id={"type": "nav-button", "route": "evaluation"},
+                        n_clicks=0,
+                        disabled=len(state.selected_films_cache) < 3,
+                    ),
+                ],
+                className="footer-eval-container",
+            ),
+            button_classes,
+        ]
