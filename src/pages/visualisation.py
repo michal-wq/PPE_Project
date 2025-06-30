@@ -3,6 +3,14 @@ import os
 import pandas as pd
 import plotly.express as px
 
+header = html.Button(
+    [
+        html.Img(src="./assets/img/Logo.svg", className="search-bar-logo"),
+    ],
+    id={"type": "nav-button", "route": "home"},
+    className="search-bar-container",
+)
+
 
 def get_layout():
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -88,9 +96,11 @@ def get_layout():
     # --- Layout zurückgeben ---
     return html.Div(
         [
+            header,
             html.H2("Film-Genres Übersicht"),
             dcc.Graph(figure=fig1),
             html.H2("Durchschnittliche Bewertung nach Genre"),
             dcc.Graph(figure=fig2),
-        ]
+        ],
+        className="visualisation-content",
     )

@@ -184,6 +184,7 @@ body {
 
 .search-bar-container .search-bar-logo {
     height: 100px;
+    cursor: pointer;
 }
 
 .search-bar-container .search-bar-field {
@@ -332,4 +333,18 @@ body {
 
 .recommendation-category .recommendation-category-list .big-list-item .big-list-item-genre-chips {
     font-size: small;
+}
+
+.imprint-content,
+.visualisation-content {
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+    align-items: center;
+    justify-self: center;
+}
+
+
+.imprint-content hr {
+    margin: 20px 0 20px 0;
 }
