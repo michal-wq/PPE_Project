@@ -142,7 +142,10 @@ def get_films_as_html(film_list: List[state.Film], mode="search"):
 
 search_bar: html.Div = html.Div(
     [
-        html.Img(src="./assets/img/Logo.svg", className="search-bar-logo"),
+        html.Button(
+            html.Img(src="./assets/img/Logo.svg", className="search-bar-logo"),
+            id={"type": "nav-button", "route": "home"},
+        ),
         html.Div(
             [
                 dcc.Input(
