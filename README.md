@@ -127,7 +127,9 @@ All rights to the data remain with their original owners.
 
 3. Wie gross sind die Daten?
 
-- `movies.csv` an sich beinhaltet 87'585 Filmeinträge
+- `movies.csv` an sich beinhaltet 87'585 Einträge
+- `tags.csv` an sich beinhaltet 200'072 Einträge
+- Es gibt 13 verschiedene Rating-Dateien, da es so viele gab, dass wir es splitten musste, damit wir es auf GitHub hochladen konnten
   <br>
   <br>
 
